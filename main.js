@@ -1,4 +1,5 @@
 nbp = 0;
+buttonspressed = {}
 $(document).ready( async function() {
    await $.ajax("https://xivapi.com/InstanceContent")
       .done(function(data) {
@@ -38,59 +39,83 @@ $(document).ready( async function() {
 })
 
 function UpdateExp(modifier, charge) {
-   value = parseInt( $('#exp').html() );
-   firstvalue = parseInt( $('#firstexp').html() );
-   switch (modifier) {
-      case "wellrested":
-         multiply = 2.5;
-         break;
-      case "wellfed":
-         multiply = 1.03;
-         break;
-      case "ring":
-         multiply = 1.3;
-         break;
-      case "menphina":
-         multiply = 1.3;
-         break;
-      case "friendship":
-         multiply = 1.2;
-         break;
-      case "squadron":
-         multiply = 1.15;
-         break;
-      case "lessthan70":
-         multiply = 2;
-         break;
-      case "lessthan90":
-         multiply = 1.5;
-         break;
-      case "mentorbonus":
-         multiply = 1.2;
-         break;
-      default:
-         break;
-   }
+   value = $('#expvalue').html();
    switch (charge) {
       case "divide":
-         if (modifier == 'firstclear') {
-            $('#exp').html(value - firstvalue);
-         }
-         else {
-            $('#exp').html(Math.round(value/multiply));
+         switch (modifier) {
+            case "wellrested":
+               buttonspressed.wellrested = 0;
+               break;
+            case "wellfed":
+               buttonspressed.wellfed = 0;
+               break;
+            case "ring":
+               buttonspressed.ring = 0;
+               break;
+            case "menphina":
+               buttonspressed.menphina = 0;
+               break;
+            case "friendship":
+               buttonspressed.friendship = 0;
+               break;
+            case "squadron":
+               buttonspressed.squadron = 0;
+               break;
+            case "lessthan70":
+               buttonspressed.lessthan70 = 0;
+               break;
+            case "lessthan90":
+               buttonspressed.lessthan90 = 0;
+               break;
+            case "mentorbonus":
+               buttonspressed.mentorbonus = 0;
+               break;
+            default:
+               break;
          }
          break;
       case "multiply":
-         if (modifier == 'firstclear') {
-            $('#exp').html(value + firstvalue);
-         }
-         else {
-            $('#exp').html(Math.round(value*multiply));
+         switch (modifier) {
+            case "wellrested":
+               buttonspressed.wellrested = 1.5;
+               break;
+            case "wellfed":
+               buttonspressed.wellfed = 0.03
+               break;
+            case "ring":
+               buttonspressed.ring = 0.3;
+               break;
+            case "menphina":
+               buttonspressed.menphina = 0.3;
+               break;
+            case "friendship":
+               buttonspressed.friendship = 0.2;
+               break;
+            case "squadron":
+               buttonspressed.squadron = 0.15;
+               break;
+            case "lessthan70":
+               buttonspressed.lessthan70 = 1;
+               break;
+            case "lessthan90":
+               buttonspressed.lessthan90 = 0.5;
+               break;
+            case "mentorbonus":
+               buttonspressed.mentorbonus = 0.2;
+               break;
+            default:
+               break;
          }
          break;
       default:
          break;
    }
+   multiply = 1;
+   values = Object.values(buttonspressed);
+   for (let index = 0; index < values.length; index++) {
+      multiply += values[index];
+   }
+   $('#exp').html(parseInt(value*multiply));
 }
 function GetNbPages(x) {
    nbp = x;
@@ -121,7 +146,7 @@ function CalculateExperience(id) {
          exp = 0;
          if (data.BossExp0) 
          {
-            exp += 2
+            exp += data.BossExp0;
          }
          if (data.BossExp1) {
             exp += data.BossExp1;
@@ -148,6 +173,7 @@ function CalculateExperience(id) {
                <div class=\"result-values\"> experience points</div>\
                <div class=\" result-text\">excluding roulette bonuses\</div>\
                <div id=\"firstexp\" hidden>"+ data.InstanceClearExp +"</div>\
+               <div id =\"expvalue\" hidden>" + exp +"</div>\
             </div>"
          );
 
