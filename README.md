@@ -7,7 +7,7 @@ Calculate the XP each Final Fantasy XIV dungeon would give you.
 
 TODO :
 - [ ] Add First time EXP.
-- [ ] Make a phone-friendly version: For now, the site is desktop-only
+- [X] Make a phone-friendly version: For now, the site is desktop-only
 - [ ] Make a custom favicon (I like Photoshop)
 - [X] Get more accurate numbers
 - [X] Track and store each button press
