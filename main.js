@@ -128,7 +128,7 @@ function UpdateList(page,type) {
          success: function success(data) {
          data.Results.forEach(element => {
             if (element.Name && element.Icon == type) {
-               $("#liste").append("<a href=\"#\"><li id=" + element.ID + " class=\"list-group-item ripple\">" + element.Name + "</li></a>");
+               $("#liste").append("<a href=\"#scrolldown\"><li id=" + element.ID + " class=\"list-group-item ripple\">" + element.Name + "</li></a>");
             }
          });
       },

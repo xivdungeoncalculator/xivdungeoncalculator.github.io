@@ -35,11 +35,7 @@ body {
     max-width: 45vw;
 }
 
-#one {
-    height: 85vh;
-}
-
-#two {
+#one, #two {
     height: 85vh;
 }
 
@@ -84,4 +80,44 @@ body {
 
 .btn-group {
     margin-bottom:2.5%;
+}
+
+@media screen and (max-width: 1000px) {
+    body {
+        overflow:auto;
+        scroll-behavior: smooth;
+    }
+    #wrap {
+        flex-direction: column;
+    }
+    #card1, #card2 {
+        width: 90vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #one {
+        height: 70vh;
+    }
+    #two {
+        height: 76vh;
+    }
+    .card {
+        max-width: 90vw;
+    }
+    .list-group {
+        font-size: 3vw;
+    }
+
+    .result-values {
+        font-size: 5vw;
+    }
+    .result-text {
+        font-size: 3vw;
+    }
+    #card2 .btn {
+        width:27vw;
+        height:10vh;
+        font-size: 3vw;
+        text-transform: none;
+    }
 }
