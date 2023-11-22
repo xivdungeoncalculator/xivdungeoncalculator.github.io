@@ -1,12 +1,12 @@
 nbp = 0;
 buttonspressed = {}
-$(document).ready( async function() {
+$(document).ready(async function () {
    await $.ajax("https://xivapi.com/InstanceContent")
-      .done(function(data) {
+      .done(function (data) {
          nbp = data.Pagination.PageTotal;
       })
 
-   await $(".dropdown-item").on("click", function(){
+   await $(".dropdown-item").on("click", function () {
       for (let index = 1; index <= nbp; index++) {
          $("#dropdownMenuButton").html($(this).html())
          $("#liste").html(" ");
@@ -14,29 +14,37 @@ $(document).ready( async function() {
       }
    });
 
-   await $(".list-group").on("click", ".list-group-item", function() {
+   await $(".list-group").on("click", ".list-group-item", function () {
 
       CalculateExperience($(this).attr('id'));
    });
-   await $(".list-group").on("mouseover", ".list-group-item", function() {
+   await $(".list-group").on("mouseover", ".list-group-item", function () {
       $(this).addClass("active");
    });
-   await $(".list-group").on("mouseout", ".list-group-item", function() {
+   await $(".list-group").on("mouseout", ".list-group-item", function () {
       $(this).removeClass("active");
    });
-   await $('#card2 .btn').on('click', function() {
+   await $('#card2 .btn').on('click', function () {
       if ($(this).hasClass("btn-primary")) {
-         UpdateExp($(this).attr('id'),'divide');
+         UpdateExp($(this).attr('id'), 'divide');
          $(this).removeClass('btn-primary');
          $(this).addClass('btn-secondary');
       }
       else {
-         UpdateExp($(this).attr('id'),'multiply');
+         UpdateExp($(this).attr('id'), 'multiply');
          $(this).removeClass('btn-secondary');
          $(this).addClass('btn-primary');
       }
    });
 })
+darkTheme = false;
+$(document).ready(function () {
+   $('#theme-toggle').on('click', function () {
+      darkTheme = !darkTheme;
+      $('body').toggleClass('dark-mode');
+      $('.navbar, .card, .card-header, .card-body, .dropdown-menu, .list-group-item, .btn-secondary').toggleClass('dark-mode');
+   });
+});
 
 function UpdateExp(modifier, charge) {
    value = $('#expvalue').html();
@@ -115,27 +123,31 @@ function UpdateExp(modifier, charge) {
    for (let index = 0; index < values.length; index++) {
       multiply += values[index];
    }
-   $('#exp').html(parseInt(value*multiply));
+   $('#exp').html(parseInt(value * multiply));
 }
 function GetNbPages(x) {
    nbp = x;
 }
 
-function UpdateList(page,type) {
+function UpdateList(page, type) {
+   addDarkThemeClass = ""
+   if (darkTheme) {
+      addDarkThemeClass = "dark-mode"
+   }
    temp = 'https://xivapi.com/InstanceContent?page=' + page;
-      $.ajax({
-         url: temp,
-         success: function success(data) {
+   $.ajax({
+      url: temp,
+      success: function success(data) {
          data.Results.forEach(element => {
             if (element.Name && element.Icon == type) {
-               $("#liste").append("<a href=\"#scrolldown\"><li id=" + element.ID + " class=\"list-group-item ripple\">" + element.Name + "</li></a>");
+               $("#liste").append("<a href=\"#scrolldown\"><li id=" + element.ID + " class=\"list-group-item ripple " + addDarkThemeClass + "\">" + element.Name + "</li></a>");
             }
          });
       },
       error: function fail(xhr) {
          alert("An error occured: " + xhr.status + " " + xhr.statusText);
       }
-      });
+   });
 }
 
 function CalculateExperience(id) {
@@ -144,8 +156,7 @@ function CalculateExperience(id) {
       url: temp,
       success: function success(data) {
          exp = 0;
-         if (data.BossExp0) 
-         {
+         if (data.BossExp0) {
             exp += data.BossExp0;
          }
          if (data.BossExp1) {
@@ -166,21 +177,21 @@ function CalculateExperience(id) {
 
          $("#result-body").html(
             "<div id=\"result-div\"> \
-               <img class=\"img-fluid\" src=\"https://www.xivapi.com" + data.Banner +"\" alt=\"Dungeon Banner\">\
-               <div class=\"result-values\">"+ data.Name +"</div>\
+               <img class=\"img-fluid\" src=\"https://www.xivapi.com" + data.Banner + "\" alt=\"Dungeon Banner\">\
+               <div class=\"result-values\">"+ data.Name + "</div>\
                <div class=\" result-text\"> gives </div>\
                <div id =\"exp\" class=\"result-values\"> "+ exp + " </div>\
                <div class=\"result-values\"> experience points</div>\
                <div class=\" result-text\">excluding roulette bonuses\</div>\
-               <div id=\"firstexp\" hidden>"+ data.InstanceClearExp +"</div>\
-               <div id =\"expvalue\" hidden>" + exp +"</div>\
+               <div id=\"firstexp\" hidden>"+ data.InstanceClearExp + "</div>\
+               <div id =\"expvalue\" hidden>" + exp + "</div>\
             </div>"
          );
 
-   },
-   error: function fail(xhr) {
-      alert("An error occured: " + xhr.status + " " + xhr.statusText);
-   }
+      },
+      error: function fail(xhr) {
+         alert("An error occured: " + xhr.status + " " + xhr.statusText);
+      }
    });
 }
 
